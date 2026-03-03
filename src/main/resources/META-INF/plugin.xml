@@ -10,6 +10,8 @@
 
     <idea-version since-build="203" until-build="243.*"/>
 
+    <depends>com.intellij.modules.platform</depends>
+
     <actions>
         <group id="TerminalAI.OpenProjectGroup" text="打开于" description="Open project with terminal AI tools">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
