@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>com.terminalai.plugin</id>
+    <name>Terminal AI Plugin</name>
+    <vendor>Terminal AI</vendor>
+
+    <description><![CDATA[
+    <h2>Terminal AI Plugin</h2>
+    <p>Right-click on a project folder in the Project View to open it with OpenCode or ClaudeCode in the terminal.</p>
+    ]]></description>
+
+    <idea-version since-build="203" until-build="243.*"/>
+
+    <actions>
+        <group id="TerminalAI.OpenProjectGroup" text="打开于" description="Open project with terminal AI tools">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <action id="TerminalAI.OpenCode" class="com.terminalai.plugin.OpenCodeAction" text="OpenCode" description="Open with OpenCode"/>
+            <action id="TerminalAI.ClaudeCode" class="com.terminalai.plugin.ClaudeCodeAction" text="ClaudeCode" description="Open with ClaudeCode"/>
+        </group>
+    </actions>
+
+</idea-plugin>
