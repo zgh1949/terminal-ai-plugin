@@ -31,58 +31,28 @@ object TerminalLauncher {
     }
 
     private fun createWindowsCommand(projectDir: File, command: String): ProcessBuilder {
-        val tempScript = File(projectDir, "temp_launch_terminal.bat")
-        tempScript.writeText("""
-            @echo off
-            cd /d "${projectDir.absolutePath}"
-            echo $command
-            $command
-            pause
-        """.trimIndent())
-        tempScript.deleteOnExit()
-
-        return ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", "\"${tempScript.absolutePath}\"")
+        val cmdCommands = """cd /d "${projectDir.absolutePath}" && echo $command && $command && pause"""
+        return ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", cmdCommands)
     }
 
     private fun createMacCommand(projectDir: File, command: String): ProcessBuilder {
-        val tempScript = File(projectDir, "temp_launch_terminal.sh")
-        tempScript.writeText("""
-            #!/bin/bash
-            cd "${projectDir.absolutePath}"
-            echo "$command"
-            $command
-            exec /bin/bash
-        """.trimIndent())
-        tempScript.setExecutable(true)
-        tempScript.deleteOnExit()
-
         return ProcessBuilder(
             "osascript",
             "-e",
             """tell application "Terminal"
-                do script "cd '${projectDir.absolutePath}' && '${tempScript.absolutePath}'"
+                do script "cd '${projectDir.absolutePath}' && echo '$command' && $command && exec /bin/bash"
                 activate
             end tell"""
         )
     }
 
     private fun createLinuxCommand(projectDir: File, command: String): ProcessBuilder {
-        val tempScript = File(projectDir, "temp_launch_terminal.sh")
-        tempScript.writeText("""
-            #!/bin/bash
-            cd "${projectDir.absolutePath}"
-            echo "$command"
-            $command
-            exec /bin/bash
-        """.trimIndent())
-        tempScript.setExecutable(true)
-        tempScript.deleteOnExit()
-
+        val bashCommand = """cd '${projectDir.absolutePath}' && echo '$command' && $command && exec /bin/bash"""
         return listOf(
-            "gnome-terminal" to listOf("--working-directory=${projectDir.absolutePath}", "--", "bash", "-c", "'${tempScript.absolutePath}'"),
-            "konsole" to listOf("--workdir", projectDir.absolutePath, "-e", "bash", "-c", "'${tempScript.absolutePath}'"),
-            "xfce4-terminal" to listOf("--working-directory=${projectDir.absolutePath}", "-e", "bash", "-c", "'${tempScript.absolutePath}'"),
-            "xterm" to listOf("-e", "bash", "-c", "cd '${projectDir.absolutePath}' && '${tempScript.absolutePath}'")
+            "gnome-terminal" to listOf("--working-directory=${projectDir.absolutePath}", "--", "bash", "-c", bashCommand),
+            "konsole" to listOf("--workdir", projectDir.absolutePath, "-e", "bash", "-c", bashCommand),
+            "xfce4-terminal" to listOf("--working-directory=${projectDir.absolutePath}", "-e", "bash", "-c", bashCommand),
+            "xterm" to listOf("-e", "bash", "-c", bashCommand)
         ).firstOrNull { (terminal, _) ->
             try {
                 ProcessBuilder("which", terminal).start().waitFor() == 0
@@ -91,6 +61,6 @@ object TerminalLauncher {
             }
         }?.let { (_, args) ->
             ProcessBuilder(args)
-        } ?: ProcessBuilder("xterm", "-e", "bash", "-c", "cd '${projectDir.absolutePath}' && '${tempScript.absolutePath}'")
+        } ?: ProcessBuilder("xterm", "-e", "bash", "-c", bashCommand)
     }
 }
