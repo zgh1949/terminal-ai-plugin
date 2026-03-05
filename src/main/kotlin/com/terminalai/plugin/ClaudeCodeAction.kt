@@ -1,6 +1,5 @@
 package com.terminalai.plugin
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
@@ -8,10 +7,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.vfs.VirtualFile
 
 class ClaudeCodeAction : AnAction() {
-
-    override fun getActionUpdateThread(): ActionUpdateThread {
-        return ActionUpdateThread.BGT
-    }
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
