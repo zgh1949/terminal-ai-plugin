@@ -8,7 +8,7 @@
     <p>Right-click on a project folder in the Project View to open it with OpenCode or ClaudeCode in the terminal.</p>
     ]]></description>
 
-    <idea-version since-build="203" until-build="243.*"/>
+    <idea-version since-build="203"/>
 
     <depends>com.intellij.modules.platform</depends>
 
