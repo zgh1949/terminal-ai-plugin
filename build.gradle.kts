@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.terminalai"
-version = "0.0.3"
+version = "0.0.4"
 
 repositories {
     mavenCentral()
@@ -27,6 +27,5 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("203")
     }
 }
