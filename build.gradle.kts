@@ -23,6 +23,7 @@ dependencies {
 
 intellijPlatform {
     pluginConfiguration {
+        name.set("TerminalAIPlugin")
         ideaVersion {
             sinceBuild.set("242")
             untilBuild.set(provider { null })
